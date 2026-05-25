@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churn Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen py-10 px-4">
+
+    <div class="max-w-2xl mx-auto">
+
+        <div class="mb-8">
+            <h1 class="text-2xl font-semibold text-gray-800">Predizione di abbandono del cliente</h1>
+            <p class="text-gray-500 text-sm mt-1">Inserisci i dati del cliente per stimare la sua probabilità di
+                abbandono.
+            </p>
+        </div>
+
+        <form id="churnForm" class="flex flex-col gap-6">
+            <!-- sezione sui dati demografici -->
+            <fieldset class="bg-white rounded-xl border border-gray-200 p-5">
+                <legend
+                    class="text-sm font-semibold text-gray-500 uppercase tracking-wide px-3 py-1 border border-gray-300 bg-white rounded-xl">
+                    Dati demografici
+                </legend>
+                <ul class="grid grid-cols-2 gap-4">
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Genere</label>
+                        <select name="gender"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Cittadino anziano</label>
+                        <select name="senior_citizen"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Ha un partner?</label>
+                        <select name="partner"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Ha persone a carico?</label>
+                        <select name="dependents"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </li>
+                </ul>
+            </fieldset>
+
+            <!-- sezione sui dati contrattuali -->
+            <fieldset class="bg-white rounded-xl border border-gray-200 p-5">
+                <legend
+                    class="text-sm font-semibold text-gray-500 uppercase tracking-wide px-3 py-1 border border-gray-300 bg-white rounded-xl">
+                    Dati del contratto
+                </legend>
+                <ul class="grid grid-cols-2 gap-4">
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Anzianità in mesi del cliente</label>
+                        <input type="number" name="tenure" value="12" min="0" max="72"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Spesa mensile ($)</label>
+                        <input type="number" name="monthly_charges" value="50.00" step="0.01"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Tipo di contratto</label>
+                        <select name="Contract"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Month-to-month</option>
+                            <option>One year</option>
+                            <option>Two year</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Fatturazione elettronica</label>
+                        <select name="paperless_billing"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </li>
+                    <li class="col-span-2">
+                        <label class="block text-sm text-gray-600 mb-1">Metodo di pagamento</label>
+                        <select name="PaymentMethod"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Electronic check</option>
+                            <option>Mailed check</option>
+                            <option>Bank transfer (automatic)</option>
+                            <option>Credit card (automatic)</option>
+                        </select>
+                    </li>
+                </ul>
+            </fieldset>
+
+            <!-- sezione sui servizi inclusi -->
+            <fieldset class="bg-white rounded-xl border border-gray-200 p-5">
+                <legend
+                    class="text-sm font-semibold text-gray-500 uppercase tracking-wide px-3 py-1 border border-gray-300 bg-white rounded-xl">
+                    Servizi
+                </legend>
+                <ul class="grid grid-cols-2 gap-4">
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Servizio telefonico</label>
+                        <select name="phone_service"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Linee multiple</label>
+                        <select name="MultipleLines"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                            <option>No phone service</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Servizio internet</label>
+                        <select name="InternetService"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>DSL</option>
+                            <option>Fiber optic</option>
+                            <option>No</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Online Security</label>
+                        <select name="OnlineSecurity"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                            <option>No internet service</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Online Backup</label>
+                        <select name="OnlineBackup"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                            <option>No internet service</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Device Protection</label>
+                        <select name="DeviceProtection"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                            <option>No internet service</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Tech Support</label>
+                        <select name="TechSupport"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                            <option>No internet service</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Streaming TV</label>
+                        <select name="StreamingTV"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                            <option>No internet service</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="block text-sm text-gray-600 mb-1">Streaming Movies</label>
+                        <select name="StreamingMovies"
+                            class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Yes</option>
+                            <option>No</option>
+                            <option>No internet service</option>
+                        </select>
+                    </li>
+                </ul>
+            </fieldset>
+
+            <button type="submit"
+                class="w-full font-semibold text-lg bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl transition-colors">
+                Predici la probabilità di abbandono
+            </button>
+
+        </form>
+
+        <!-- Risultato della predizione -->
+        <div id="result" class="hidden mt-6 bg-white rounded-xl border border-gray-200 p-5">
+
+            <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Risultato</h2>
+
+            <!-- banner della predizione -->
+            <div id="predictionBanner"
+                class="rounded-lg px-4 py-3 mb-5 flex flex-row justify-center items-center gap-3">
+                <p id="predictionLabel" class="font-semibold text-center text-lg"></p>
+            </div>
+
+            <!-- barra probabilità -->
+            <div class="mt-2">
+                <div class="flex justify-between mb-1">
+                    <span class="text-green-700 font-medium">Probabilità di fidelizzazione: <span
+                            id="probNoChurn"></span></span>
+                    <span class="text-red-700 font-medium">Probabilità di abbandono: <span id="probChurn"></span></span>
+                </div>
+                <div class="w-full bg-red-500 rounded-full h-3">
+                    <div id="barNoChurn"
+                        class="bg-green-500 h-3 rounded-full rounded-r-none transition-all duration-500"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- errore webserver -->
+        <div id="error" class="hidden mt-6 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
+            Errore nella predizione. Controlla che il server sia attivo.
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById("churnForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const data = Object.fromEntries(new FormData(form).entries());
+
+            document.getElementById("result").classList.add("hidden");
+            document.getElementById("error").classList.add("hidden");
+
+            try {
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) throw new Error();
+
+                const res = await response.json();
+
+                const churnPct = (res.probability * 100).toFixed(2);
+                const noChurnPct = (100 - res.probability * 100).toFixed(2);
+                const isChurn = res.prediction === 1;
+
+                const banner = document.getElementById("predictionBanner");
+                banner.className = `rounded-lg px-4 py-3 mb-5 flex items-center gap-3 ${isChurn ? "bg-red-50" : "bg-green-50"}`;
+
+                document.getElementById("predictionLabel").textContent = isChurn ? "Cliente a rischio abbandono!" : "Cliente fidelizzato";
+                document.getElementById("predictionLabel").className = `font-semibold text-center text-lg ${isChurn ? "text-red-700" : "text-green-700"}`;
+
+                document.getElementById("probNoChurn").textContent = `${noChurnPct}%`;
+                document.getElementById("probChurn").textContent = `${churnPct}%`;
+                document.getElementById("barNoChurn").style.width = `${noChurnPct}%`;
+
+                document.getElementById("result").classList.remove("hidden");
+
+            } catch {
+                document.getElementById("error").classList.remove("hidden");
+            }
+        });
+    </script>
+
+</body>
+
+</html>
